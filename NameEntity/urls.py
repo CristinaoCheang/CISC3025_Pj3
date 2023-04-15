@@ -1,8 +1,9 @@
+
 from django.urls import path
-from .views import home
+from . import views
 
 
 app_name = "NameEntity"
 urlpatterns = [
-    path("", home, name="home"),
+    path('', views.classify_sentence, name='classify_sentence'),
 ]

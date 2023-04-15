@@ -22,7 +22,7 @@ nltk.download('averaged_perceptron_tagger')
 
 
 # create a predictor class
-def predict_sentence(sentence, classifier):
+def predict_sentence(sentence, classifier, MEMM, self=None):
     # Tokenize the sentence into words
     words = nltk.word_tokenize(sentence)
 
@@ -35,7 +35,7 @@ def predict_sentence(sentence, classifier):
     # Loop through each word in the sentence
     for i in range(len(words)):
         # Extract the features for the current word
-        features = MEMM().features(words, previous_label, i)
+        features = MEMM.features(self, words, previous_label, i)
 
         # Use the classifier to predict the label for the current word
         predicted_label = classifier.classify(features)
@@ -77,36 +77,23 @@ class MEMM():
             features['Titlecase'] = 1
 
         # ===== TODO: Add your features here =======#
-        current_word = words[position]
+            # Prefixes and Suffixes
+        features['prefix_3'] = current_word[:3]
+        features['suffix_3'] = current_word[-3:]
+
+            # Word shape
         if current_word.isupper():
-            features['all_uppercase'] = 1
+            features['all_caps'] = 1
         elif current_word.islower():
-            features['all_lowercase'] = 1
+            features['all_lower'] = 1
+        elif current_word.istitle():
+            features['capitalized'] = 1
         else:
             features['mixed_case'] = 1
 
-        # Feature 2: Prefixes and suffixes
-        if len(current_word) >= 2:
-            features['prefix_2'] = current_word[:2]
-            features['suffix_2'] = current_word[-2:]
-        if len(current_word) >= 3:
-            features['prefix_3'] = current_word[:3]
-            features['suffix_3'] = current_word[-3:]
-
-        # Feature 3: Part-of-speech tags
-        pos_tags = nltk.pos_tag(words)
-        features['pos_tag'] = pos_tags[position][1]
-
-        # Feature 4: Word clusters
-        # Add your code here
-
-        # Feature 5: Contextual features
-        if position > 0:
-            features['prev_word'] = words[position - 1]
-        if position < len(words) - 1:
-            features['next_word'] = words[position + 1]
-
-        # =============== TODO: Done ================#
+        # Word length
+        features['length_{}'.format(len(current_word))] = 1
+        # =============== TODO: Done ================ #
         return features
 
     def load_data(self, filename):
@@ -126,7 +113,6 @@ class MEMM():
         words, labels = self.load_data(self.train_path)
 
         previous_labels = ["O"] + labels
-        print(words)
         features = [self.features(words, previous_labels[i], i)
                     for i in range(len(words))]
         train_samples = [(f, l) for (f, l) in zip(features, labels)]

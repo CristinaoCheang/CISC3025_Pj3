@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Classification Result</title>
+</head>
+<body>
+	<h1>Classification Result</h1>
+	<p><strong>Sentence:</strong> {{ sentence }}</p>
+	<p><strong>Classification Result:</strong>{{ classification_result }}</p>
+	<ul>
+	{% for sentence, classification in classification_result.items %}
+        {% if classification == 'PERSON' %}
+            <li>{{ sentence }}: PERSON</li>
+        {% else %}
+            <li>{{ sentence }}: O</li>
+        {% endif %}
+    {% endfor %}
+	</ul>
+</body>
+</html>

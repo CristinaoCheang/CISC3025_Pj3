@@ -9,7 +9,7 @@
 # --------------------------------------------------
 
 import argparse
-from StartCodes.NER.MEM import MEMM
+from MEM import MEMM
 
 
 def main():
@@ -45,7 +45,7 @@ if __name__ == '__main__':
 
     #====== Customization ======
     BETA = 0.5
-    MAX_ITER = 5
+    MAX_ITER = 20
     BOUND = (0, 20)
     #==========================
 

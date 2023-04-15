@@ -1,24 +1,21 @@
+import nltk
+
 from StartCodes.NER.MEM import predict_sentence
 from django.http import JsonResponse
 from django.shortcuts import render
 from StartCodes.NER.MEM import MEMM
 from StartCodes.NER import MEM
+import pickle
+from django.shortcuts import render
+from django.http import HttpResponse
 
 
-def predict(text, model):
-    prediction = MEM.predict_sentence(text, model)
-    return prediction
-
-def home(request):
+def classify_sentence(request, self=None):
     if request.method == 'POST':
-        # 获取POST请求中的数据
-        text = request.POST['text']
-
-        # 对数据进行预测
-        result = predict(text, model='model.pkl')
-
-        # 返回预测结果
-        return JsonResponse({'result': result})
+        sentence = request.POST['sentence']
+        classifier = nltk.data.load('./StartCodes/model.pkl', format='pickle')
+        prediction = predict_sentence(sentence, classifier, MEMM, self)
+        return render(request, 'Output.html',
+                      {'sentence': sentence, 'classification_result': prediction})
     else:
-        # 显示HTML页面
-        return render(request, 'ner.html')
+        return render(request, 'Input.html')
