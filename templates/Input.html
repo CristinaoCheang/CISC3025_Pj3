@@ -2,13 +2,65 @@
 <html>
 <head>
 	<title>Classify Sentence</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      /* Center the form on the page */
+      body {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          background-color: #FFF2FF;
+          height: 80vh;
+      }
+
+      label {
+          font-size: 20px;
+          font-weight: bold;
+          margin-bottom: 10px;
+          color: #007bff;
+        }
+
+      /* Style the input field */
+      input[type="text"] {
+          padding: 10px;
+          font-size: 16px;
+          border-radius: 5px;
+          border: none;
+          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+          margin-bottom: 20px;
+          text-align: center;
+          display: inline-block;
+          width: 1000%;
+          max-width: 500px;
+          justify-content: center;
+          align-items: center;
+      }
+
+      /* Style the submit button */
+      input[type="submit"] {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 10px;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+      }
+
+      /* Change the submit button color on hover */
+      input[type="submit"]:hover {
+        background-color: #0062cc;
+      }
+    </style>
 </head>
 <body>
 	<h1>Classify Sentence</h1>
 	<form method="POST">
 		{% csrf_token %}
 		<label for="sentence">Enter a sentence:</label><br>
-		<input type="text" id="sentence" name="sentence"><br><br>
+		<input type="text" id="sentence" name="sentence"><br>
 		<input type="submit" value="Submit">
 	</form>
 </body>

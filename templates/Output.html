@@ -2,19 +2,56 @@
 <html>
 <head>
 	<title>Classification Result</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <style>
+      /* Center the form on the page */
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+          background-color: #FFF2FF;
+      }
+      h1 {
+          font-size: 20px;
+          font-weight: bold;
+          margin-bottom: 10px;
+          color: #007bff;
+        }
+
+      /* Style the input field */
+      p {
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        width: 80%;
+        max-width: 500px;
+      }
+
+      /* Style the submit button */
+      ul {
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        border: none;
+        color: blue;
+        cursor: pointer;
+        transition: background-color 0.2s ease-in-out;
+      }
+    </style>
 </head>
 <body>
 	<h1>Classification Result</h1>
 	<p><strong>Sentence:</strong> {{ sentence }}</p>
-	<p><strong>Classification Result:</strong>{{ classification_result }}</p>
+	<p><strong>Classification Result:</strong></p>
 	<ul>
-	{% for sentence, classification in classification_result.items %}
-        {% if classification == 'PERSON' %}
-            <li>{{ sentence }}: PERSON</li>
-        {% else %}
-            <li>{{ sentence }}: O</li>
-        {% endif %}
-    {% endfor %}
-	</ul>
+        {% for item in classification_result %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>

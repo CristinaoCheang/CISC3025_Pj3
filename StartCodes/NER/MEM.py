@@ -25,6 +25,8 @@ nltk.download('averaged_perceptron_tagger')
 def predict_sentence(sentence, classifier, MEMM, self=None):
     # Tokenize the sentence into words
     words = nltk.word_tokenize(sentence)
+    # remove the punctuation in wrods
+    words = [word for word in words if word.isalpha()]
 
     # Initialize the previous label as "O"
     previous_label = "O"
@@ -47,7 +49,12 @@ def predict_sentence(sentence, classifier, MEMM, self=None):
         previous_label = predicted_label
 
     # Return the list of predicted labels
-    return predicted_labels
+    final_labels = []
+    final_output = []
+    for i in range(len(predicted_labels)):
+        final_labels.append(words[i] + ' : ' + predicted_labels[i])
+    return final_labels
+
 
 class MEMM():
 
@@ -77,11 +84,11 @@ class MEMM():
             features['Titlecase'] = 1
 
         # ===== TODO: Add your features here =======#
-            # Prefixes and Suffixes
+        # Prefixes and Suffixes
         features['prefix_3'] = current_word[:3]
         features['suffix_3'] = current_word[-3:]
 
-            # Word shape
+        # Word shape
         if current_word.isupper():
             features['all_caps'] = 1
         elif current_word.islower():
@@ -93,6 +100,11 @@ class MEMM():
 
         # Word length
         features['length_{}'.format(len(current_word))] = 1
+
+        # Word position
+        features['position_{}'.format(position)] = 1
+
+
         # =============== TODO: Done ================ #
         return features
 
