@@ -33,7 +33,7 @@ def predict_sentence(sentence, classifier, MEMM, self=None):
         sentence = sentence.replace('ABBREVIATION', abb, 1)
     # Tokenize the sentence into words
     words = nltk.word_tokenize(sentence)
-    prefixes = ["Mr.", "Mrs.", "Ms.", "Dr.", "Prof.", "Rev.", "Hon."]
+    prefixes = ["Mr.", "Mr", "Mrs.", "Mrs", "Ms.", "Ms", "Dr.", "Prof.", "Rev.", "Hon."]
     suffixes = ["Jr", "Sr", "II", "III", "IV", "Esq."]
     i = 1
     k = 0
@@ -123,6 +123,10 @@ class MEMM():
             features['Lowercase'] = 1
         else:
             features['Mixcase'] = 1
+
+        # Word length
+        features['length_{}'.format(len(current_word))] = 1
+
 
         # =============== TODO: Done ================ #
         return features
