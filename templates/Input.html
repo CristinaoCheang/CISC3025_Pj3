@@ -2,60 +2,88 @@
 <html>
 <head>
 	<title>Classify Sentence</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-      /* Center the form on the page */
-      body {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          background-color: #FFF2FF;
-          height: 80vh;
-      }
+    	<style>
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			background-color: #f1f8ff;
+			margin: 0;
+			min-height: 100vh;
+		}
+		h1 {
+			background-color: #f1f8ff;
+			box-shadow: 5px 5px 5px #bfbfbf;
+			padding: 10px;
+			border-radius: 10px;
+            font-size: 30px;
+            text-shadow: 2px 2px 2px 2px #bfbfbf;
+            margin-bottom: 0;
+		}
+		form {
+			background-color: #f1f8ff;
+			box-shadow: 5px 5px 5px #bfbfbf;
+			padding: 20px;
+			border-radius: 10px;
+			width: 33%;
+			margin: auto;
+            margin-top: 20px;
+		}
+		input[type="text"], input[type="submit"] {
+			background-color: #e6f2ff;
+			box-shadow: 3px 3px 3px #bfbfbf;
+			padding: 10px;
+			border-radius: 5px;
+			border: none;
+			margin: 5px;
+			width: 100%;
+			box-sizing: border-box;
+		}
+		input[type="submit"] {
+			background-color: #b3d9ff;
+			color: white;
+			padding: 10px;
+			border-radius: 5px;
+			cursor: pointer;
+			font-weight: bold;
+			font-size: 12pt;
+		}
 
-      label {
-          font-size: 20px;
-          font-weight: bold;
-          margin-bottom: 10px;
-          color: #007bff;
+html> *:not(form):not(h1) {
+            background-color: #fffbf6;
+            padding: 10px;
+            border-radius: 10px;
         }
-
-      /* Style the input field */
-      input[type="text"] {
-          padding: 10px;
-          font-size: 16px;
-          border-radius: 5px;
-          border: none;
-          box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-          margin-bottom: 20px;
-          text-align: center;
-          display: inline-block;
-          width: 1000%;
-          max-width: 500px;
-          justify-content: center;
-          align-items: center;
-      }
-
-      /* Style the submit button */
-      input[type="submit"] {
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 10px;
-        border: none;
-        background-color: #007bff;
-        color: #fff;
-        cursor: pointer;
-        transition: background-color 0.2s ease-in-out;
-      }
-
-      /* Change the submit button color on hover */
-      input[type="submit"]:hover {
-        background-color: #0062cc;
-      }
-    </style>
+		header {
+            background-color: #728ca5;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            font-size: 20px;
+            font-weight: bold;
+			width: 100%;
+			margin-bottom: 10px;
+        }
+        footer {
+            background-color: #728ca5;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+			width: 100%;
+			margin-top: auto;
+			margin-bottom: 0;
+			position: absolute;
+			bottom: 0;
+        }
+	</style>
 </head>
 <body>
+    <header>
+        <div>CISC3025-Project03</div>
+        <div>Name Entity Classification</div>
+    </header>
 	<h1>Classify Sentence</h1>
 	<form method="POST">
 		{% csrf_token %}
@@ -63,5 +91,10 @@
 		<input type="text" id="sentence" name="sentence"><br>
 		<input type="submit" value="Submit">
 	</form>
+    <footer>
+        Thank you for your testing<br><br>
+        Group16<br>
+        FAN XIAO YUE DC025823 & CHEANG CHI HOU DB927150 <br>
+    </footer>
 </body>
 </html>

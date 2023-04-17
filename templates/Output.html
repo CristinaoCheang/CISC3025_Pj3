@@ -2,49 +2,74 @@
 <html>
 <head>
 	<title>Classification Result</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <style>
-      /* Center the form on the page */
-      body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-
-          background-color: #FFF2FF;
-      }
-      h1 {
-          font-size: 20px;
-          font-weight: bold;
-          margin-bottom: 10px;
-          color: #007bff;
+       <style>
+		body {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			background-color:  #f1f8ff;
+			min-height: 100vh;
+		}
+		h1 {
+			background-color:  #f1f8ff;
+			box-shadow: 5px 5px 5px #bfbfbf;
+			padding: 10px;
+			border-radius: 10px;
+            font-size: 25px;
+            text-shadow: 2px 2px 2px 2px #bfbfbf;
+		}
+		p {
+			background-color:  #f1f8ff;
+			box-shadow: 5px 5px 5px #bfbfbf;
+			padding: 20px;
+			border-radius: 10px;
+			width: 33%;
+			margin: 15px;
+		}
+		ul {
+            background-color: #ccdff1;
+            box-shadow: 3px 3px 3px #bfbfbf;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            margin: 5px 40px; /* added to set left and right margin to 40px */
+            box-sizing: border-box;
+            list-style-type: none; /* added to remove bullet points */
         }
-
-      /* Style the input field */
-      p {
-        padding: 10px;
-        font-size: 16px;
-        border-radius: 5px;
-        border: none;
-        box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-        width: 80%;
-        max-width: 500px;
-      }
-
-      /* Style the submit button */
-      ul {
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 5px;
-        border: none;
-        color: blue;
-        cursor: pointer;
-        transition: background-color 0.2s ease-in-out;
-      }
-    </style>
+		html> *:not(form):not(h1) {
+            background-color: #fffbf6;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        header {
+            background-color: #728ca5;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            font-size: 20px;
+            font-weight: bold;
+			width: 100%;
+			margin-bottom: 10px;
+        }
+        footer {
+            background-color: #728ca5;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+			width: 100%;
+			margin-top: auto; /* added to keep footer at bottom */
+			position: absolute; /* added to position footer */
+			bottom: 0; /* added to position footer */
+        }
+	</style>
 </head>
 <body>
+    <header>
+        <div>CISC3025-Project03</div>
+        <div>Name Entity Classification</div>
+    </header>
 	<h1>Classification Result</h1>
 	<p><strong>Sentence:</strong> {{ sentence }}</p>
 	<p><strong>Classification Result:</strong></p>
@@ -53,5 +78,10 @@
             <li>{{ item }}</li>
         {% endfor %}
     </ul>
+    <footer>
+        Thank you for your testing<br><br>
+        Group16<br>
+        FAN XIAO YUE DC025823 & CHEANG CHI HOU DB927150 <br>
+    </footer>
 </body>
 </html>
