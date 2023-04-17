@@ -7,6 +7,7 @@
 # Created Date : April 4th 2020, 17:45:05
 # Last Modified: April 4th 2020, 17:45:05
 # --------------------------------------------------
+import re
 
 from nltk.classify.maxent import MaxentClassifier
 from sklearn.metrics import (accuracy_score, fbeta_score, precision_score,
@@ -23,11 +24,34 @@ nltk.download('averaged_perceptron_tagger')
 
 # create a predictor class
 def predict_sentence(sentence, classifier, MEMM, self=None):
+    # remove the punctuation in words but not remove the Mr. Mrs. etc.
+    pattern = r'\b(?:Mr|Mrs|Ms|Dr)[.]'
+    abbreviations = re.findall(pattern, sentence)
+    sentence = re.sub(pattern, 'ABBREVIATION', sentence)
+    sentence = re.sub(r'[^\w\s]|_', '', sentence)
+    for i, abb in enumerate(abbreviations):
+        sentence = sentence.replace('ABBREVIATION', abb, 1)
     # Tokenize the sentence into words
     words = nltk.word_tokenize(sentence)
-    # remove the punctuation in wrods
-    words = [word for word in words if word.isalpha()]
+    prefixes = ["Mr.", "Mrs.", "Ms.", "Dr.", "Prof.", "Rev.", "Hon."]
+    suffixes = ["Jr", "Sr", "II", "III", "IV", "Esq."]
+    i = 1
+    k = 0
+    while i <= len(words):
+        if i >= 1 & i <= len(words):
+            previous_word = words[i - 1]
+            if previous_word in prefixes:
+                words[i] = previous_word + words[i]
+                words.remove(previous_word)
+        i += 1
 
+    while k < len(words) - 1:
+        if k >= 0 & k <= len(words):
+            next_word = words[k + 1]
+            if next_word in suffixes:
+                words[k] = words[k] + " " + next_word
+                words.remove(next_word)
+        k += 1
     # Initialize the previous label as "O"
     previous_label = "O"
 
@@ -80,30 +104,25 @@ class MEMM():
         current_word = words[position]
         features['has_(%s)' % current_word] = 1
         features['prev_label'] = previous_label
-        if current_word[0].isupper():
-            features['Titlecase'] = 1
 
         # ===== TODO: Add your features here =======#
-        # Prefixes and Suffixes
-        features['prefix_3'] = current_word[:3]
-        features['suffix_3'] = current_word[-3:]
+        # Previous and next word
+        prefixes = ["Mr.", "Mrs.", "Ms.", "Dr.", "Prof.", "Rev.", "Hon."]
+        suffixes = ["Jr", "Sr", "II", "III", "IV", "Esq."]
+
+        if current_word[:3] in prefixes:
+            features['Honorific'] = 1
+
+        if current_word[-3:] in suffixes:
+            features['Junior'] = 1
 
         # Word shape
-        if current_word.isupper():
-            features['all_caps'] = 1
-        elif current_word.islower():
-            features['all_lower'] = 1
-        elif current_word.istitle():
-            features['capitalized'] = 1
+        if current_word[0].isupper():
+            features['Titlecase'] = 1
+        elif current_word[0].islower():
+            features['Lowercase'] = 1
         else:
-            features['mixed_case'] = 1
-
-        # Word length
-        features['length_{}'.format(len(current_word))] = 1
-
-        # Word position
-        features['position_{}'.format(position)] = 1
-
+            features['Mixcase'] = 1
 
         # =============== TODO: Done ================ #
         return features
