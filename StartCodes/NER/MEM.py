@@ -50,7 +50,6 @@ def predict_sentence(sentence, classifier, MEMM, self=None):
 
     # Return the list of predicted labels
     final_labels = []
-    final_output = []
     for i in range(len(predicted_labels)):
         final_labels.append(words[i] + ' : ' + predicted_labels[i])
     return final_labels
@@ -80,8 +79,6 @@ class MEMM():
         current_word = words[position]
         features['has_(%s)' % current_word] = 1
         features['prev_label'] = previous_label
-        if current_word[0].isupper():
-            features['Titlecase'] = 1
 
         # ===== TODO: Add your features here =======#
         # Prefixes and Suffixes
@@ -100,10 +97,6 @@ class MEMM():
 
         # Word length
         features['length_{}'.format(len(current_word))] = 1
-
-        # Word position
-        features['position_{}'.format(position)] = 1
-
 
         # =============== TODO: Done ================ #
         return features
