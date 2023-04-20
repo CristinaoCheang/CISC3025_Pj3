@@ -25,33 +25,11 @@ nltk.download('averaged_perceptron_tagger')
 # create a predictor class
 def predict_sentence(sentence, classifier, MEMM, self=None):
     # remove the punctuation in words but not remove the Mr. Mrs. etc.
-    pattern = r'\b(?:Mr|Mrs|Ms|Dr)[.]'
-    abbreviations = re.findall(pattern, sentence)
-    sentence = re.sub(pattern, 'ABBREVIATION', sentence)
-    sentence = re.sub(r'[^\w\s]|_', '', sentence)
-    for i, abb in enumerate(abbreviations):
-        sentence = sentence.replace('ABBREVIATION', abb, 1)
+    # sentence = re.sub(r'[^\w\s]|_', '', sentence)
+
     # Tokenize the sentence into words
     words = nltk.word_tokenize(sentence)
-    prefixes = ["Mr.", "Mr", "Mrs.", "Mrs", "Ms.", "Ms", "Dr.", "Prof.", "Rev.", "Hon."]
-    suffixes = ["Jr", "Sr", "II", "III", "IV", "Esq."]
-    i = 1
-    k = 0
-    while i <= len(words):
-        if i >= 1 & i <= len(words):
-            previous_word = words[i - 1]
-            if previous_word in prefixes:
-                words[i] = previous_word + words[i]
-                words.remove(previous_word)
-        i += 1
 
-    while k < len(words) - 1:
-        if k >= 0 & k <= len(words):
-            next_word = words[k + 1]
-            if next_word in suffixes:
-                words[k] = words[k] + " " + next_word
-                words.remove(next_word)
-        k += 1
     # Initialize the previous label as "O"
     previous_label = "O"
 
@@ -74,7 +52,6 @@ def predict_sentence(sentence, classifier, MEMM, self=None):
 
     # Return the list of predicted labels
     final_labels = []
-    final_output = []
     for i in range(len(predicted_labels)):
         final_labels.append(words[i] + ' : ' + predicted_labels[i])
     return final_labels
@@ -106,27 +83,50 @@ class MEMM():
         features['prev_label'] = previous_label
 
         # ===== TODO: Add your features here =======#
-        # Previous and next word
-        prefixes = ["Mr.", "Mrs.", "Ms.", "Dr.", "Prof.", "Rev.", "Hon."]
-        suffixes = ["Jr", "Sr", "II", "III", "IV", "Esq."]
-
-        if current_word[:3] in prefixes:
+        # Previous word
+        previous = ["Mr.", "Mrs.", "Ms.", "Dr.", "Prof.", "Rev.", "Hon.", "Mr", "Mrs", "Ms", "Dr", "Prof", "Rev", "Hon"]
+        previous_word = words[position - 1]
+        if previous_word in previous:
             features['Honorific'] = 1
 
-        if current_word[-3:] in suffixes:
-            features['Junior'] = 1
-
         # Word shape
-        if current_word[0].isupper():
-            features['Titlecase'] = 1
-        elif current_word[0].islower():
-            features['Lowercase'] = 1
+        if current_word.isupper():
+            features['all_caps'] = 1
+        elif current_word.islower():
+            features['all_lower'] = 1
+        elif current_word.istitle():
+            features['capitalized'] = 1
         else:
-            features['Mixcase'] = 1
+            features['mixed_case'] = 1
 
         # Word length
         features['length_{}'.format(len(current_word))] = 1
 
+        # Word position of people's name
+        if position == 0:
+            features['first_word'] = 1
+        elif position == len(words) - 1:
+            features['last_word'] = 1
+
+        # Suffixes[-2:] of name
+        suffixes_last_two = ["on", "in", "dy", "ry", "ty", "ny", "ly"]
+        if current_word[-2:] in suffixes_last_two:
+            features['suffix[-2:]'] = 1
+
+        # Suffixes[-3:] of name
+        suffixes_last_three = ["ard", "ert"]
+        if current_word[-3:] in suffixes_last_three:
+            features['suffix[-3:]'] = 1
+
+        # Prefixes[:2] of name
+        prefixes_first_two = ["Mc", "O'", "D'", "De", "Di", "Du", "La", "Le", "Lo", "Mc"]
+        if current_word[:2] in prefixes_first_two:
+            features['prefix[:2]'] = 1
+
+        # Prefixes[:3] of name
+        prefixes_first_three = ["Mac", "Von", "Van", "Ste"]
+        if current_word[:3] is prefixes_first_three:
+            features['prefix[:3]'] = 1
 
         # =============== TODO: Done ================ #
         return features
@@ -152,7 +152,6 @@ class MEMM():
                     for i in range(len(words))]
         train_samples = [(f, l) for (f, l) in zip(features, labels)]
         classifier = MaxentClassifier.train(train_samples, max_iter=self.max_iter)
-
         self.classifier = classifier
 
     def test(self):
